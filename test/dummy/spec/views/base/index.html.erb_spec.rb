@@ -1,5 +1,9 @@
 require 'rails_helper'
 
-RSpec.describe "base/index.html.erb", :type => :view do
-  pending "add some examples to (or delete) #{__FILE__}"
+RSpec.describe "base/index.html.erb", :js => true do
+  it "should show calendar" do
+    visit root_path
+    page.save_screenshot('screenshot.png')
+    expect(page).to have_css('div.clndr')
+  end
 end
