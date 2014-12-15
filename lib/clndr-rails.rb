@@ -29,6 +29,7 @@ class Clndr
     @name = name.to_s
     @template = @@template
     @weak_offset = @@weak_offset
+    @start_with_month =@@start_with_month
   end
 
   #   return html of calendar
@@ -38,8 +39,18 @@ class Clndr
       javascript_tag("$('##{@name}-clndr').clndr({
         #{'template:'+@template+',' if !@template.nil?}
         #{'weekOffset:'+@weak_offset.to_s+',' if @weak_offset}
+       #{'startWithMonth:\''+@start_with_month.to_s+'\',' if !@start_with_month.nil?}
           });")
       end
+  end
+
+  # if date is instance of Time convert to "YYYY-MM-DD" формат
+  def start_with_month=(date)
+    if date.class == Time
+      @start_with_month= date.strftime("%F")
+    else
+      @start_with_month = date
+    end
   end
 
 end
