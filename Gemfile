@@ -8,6 +8,8 @@ gemspec
 gem 'rspec-rails'
 gem 'capybara'
 gem 'capybara-webkit'
+gem 'tzinfo'
+gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw]
 
 # Declare any dependencies that are still in development here instead of in
 # your gemspec. These might include edge Rails or gems from your path or
