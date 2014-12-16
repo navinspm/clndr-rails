@@ -7,7 +7,7 @@ gemspec
 
 gem 'rspec-rails'
 gem 'capybara'
-gem 'capybara-webkit'
+# gem 'capybara-webkit'
 gem 'tzinfo'
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw]
 
