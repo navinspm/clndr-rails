@@ -10,6 +10,7 @@ class Clndr
   @@show_adjacent_months= true
   @@adjacent_days_change_month=false
   @@done_rendering=nil
+  @@constraints ={}
 
 
 
@@ -32,10 +33,10 @@ class Clndr
   def self.start_with_month=(date)
     if date.class == Time
       @@start_with_month=date.strftime("%F")
-    elsif date.match(/\d{4}\-d{2}\-d{2}/)
-      @@start_with_month
+    elsif date.match(/\d{4}\-\d{2}\-\d{2}/)
+      @@start_with_month = date
     else
-      # todo resque Clndr::Errors::WrongDateFormat
+      raise Clndr::Error::WrongDateFormat
     end
   end
 
@@ -61,6 +62,26 @@ class Clndr
 
   def self.done_rendering=(jsfnction)
     @@done_rendering = jsfnction
+  end
+
+  def self.constraints_start=(date)
+    if date.class == Time
+      @@constraints[:startDate]=date.strftime("%F")
+    elsif date.match(/\d{4}\-\d{2}\-\d{2}/)
+      @@constraints[:startDate]=date
+    else
+      raise Clndr::Error::WrongDateFormat
+    end
+  end
+
+  def self.constraints_end=(date)
+    if date.class == Time
+      @@constraints[:endDate]=date.strftime("%F")
+    elsif date.match(/\d{4}\-\d{2}\-\d{2}/)
+      @@constraints[:endDate]=date
+    else
+      raise Clndr::Error::WrongDateFormat
+    end
   end
 
 end

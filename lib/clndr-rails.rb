@@ -1,5 +1,7 @@
 require 'clndr-rails/engine'
 require "clndr-rails/version"
+require 'clndr-rails/errors'
+
 
 require 'momentjs-rails'
 require 'jquery-rails'
@@ -11,6 +13,7 @@ class Clndr
   autoload :Template, 'clndr-rails/templates'
   require 'clndr-rails/config'
 
+
   include ActionView::Helpers
   include ActionView::Context
   include ActiveSupport::Inflector
@@ -21,7 +24,7 @@ class Clndr
     ObjectSpace.each_object(self) {|cal| return cal if cal.name.to_sym == calendar  }
   end
 
-  attr_accessor :template, :weak_offset, :days_of_the_weak,:show_adjacent_months, :adjacent_days_change_month, :done_rendering
+  attr_accessor :template, :weak_offset, :days_of_the_weak,:show_adjacent_months, :adjacent_days_change_month, :done_rendering, :events, :constraints
   attr_reader :name
 
 
@@ -37,6 +40,8 @@ class Clndr
     @show_adjacent_months= @@show_adjacent_months
     @adjacent_days_change_month = @@adjacent_days_change_month
     @done_rendering = @done_rendering
+    @constraints =@@constraints
+    @events =[]
   end
 
   #   return html of calendar
@@ -48,11 +53,17 @@ class Clndr
         #{'weekOffset:'+@weak_offset.to_s+',' if @weak_offset}
         #{'startWithMonth:\''+@start_with_month.to_s+'\',' if !@start_with_month.nil?}
         #{'daysOfTheWeek:'+@days_of_the_weak.to_s+',' if !@days_of_the_weak.nil?}
-        #{build_from_hash(@click_events,'clickEvent')}
+        #{build_from_hash(@click_events,'clickEvents')}
         #{build_from_hash_safety(@targets,'targets')}
         #{'showAdjacentMonths:'+@show_adjacent_months.to_s+',' if !@show_adjacent_months}
         #{'adjacentDaysChangeMonth:'+@adjacent_days_change_month.to_s+',' if @adjacent_days_change_month}
         #{'doneRendering:'+@done_rendering+',' if !@done_rendering.nil?}
+        #{ if @constraints.length >0
+             build_from_hash_safety @constraints, 'constraints'
+           end}
+        #{if @events.length > 0
+            'events:['+build_events(@events)+']'
+          end}
           });")
       end
   end
@@ -74,6 +85,19 @@ class Clndr
     @targets
   end
 
+  def add_event(date,title,*other_data)
+    if date.class == Time
+     date=date.strftime("%F")
+    elsif date.match(/\d{4}\-\d{2}\-\d{2}/)
+     date = date
+    else
+      raise Clndr::Error::WrongDateFormat
+    end
+    event = {date: date,title:title}
+    event.merge! other_data.first
+    @events.push event
+  end
+
   private
 
     def build_from_hash(hash, parametr)
@@ -87,4 +111,13 @@ class Clndr
       "#{parametr}: {#{hash.map{|k,v|"#{k}:'#{v}',"}.join()}},"
     end
   end
+
+  def build_events(array_of_events)
+    list_of_events=''
+    array_of_events.each do |event|
+      list_of_events +="{ date: '#{event.delete(:date)}', title: '#{event.delete(:title)}', #{event.map{|k,v| "#{k}:'#{v}'"}.join(',')}},"
+    end
+    list_of_events
+  end
+
 end

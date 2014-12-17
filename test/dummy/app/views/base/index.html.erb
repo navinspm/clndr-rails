@@ -1,16 +1,3 @@
 
 <h1>Example full calndar </h1>
 <%= show_calendar(:full,style:"width:600px",id:'ff') %>
-<h2>Example blank calendar</h2>
-<%= show_calendar(:blank,class:'this-is-blank') %>
-<h2>Example custom calendar template</h2>
-<script type="text/template" id="custom-template">
-<div class="custom-clndr-grid">
-  <div class="days-of-the-week clearfix">
-    <%% _.each(daysOfTheWeek, function(day) { %>
-        <div class="header-day"><%%= day %></div>
-    <%% }); %>
-  </div>
-</div>
-</script>
-<%= show_calendar(:custom_template) %>

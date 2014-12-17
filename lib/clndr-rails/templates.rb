@@ -1,7 +1,9 @@
 class Clndr
   module Template
+
     extend ActionView::Helpers::TagHelper
     extend ActionView::Context
+
 
     FullCalendar = "'#{self.content_tag(:div,nil,class:'clndr-controls') do
       self.content_tag(:div,'<',class:"clndr-previous-button")+
