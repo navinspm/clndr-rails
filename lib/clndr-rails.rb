@@ -46,6 +46,8 @@ class Clndr
     @adjacent_days_change_month = @@adjacent_days_change_month
     @done_rendering = @done_rendering
     @constraints =@@constraints
+    @force_six_rows =@@force_six_rows
+    @has_multiday= false
     @events =[]
   end
 
@@ -63,13 +65,22 @@ class Clndr
         #{'showAdjacentMonths:'+@show_adjacent_months.to_s+',' if !@show_adjacent_months}
         #{'adjacentDaysChangeMonth:'+@adjacent_days_change_month.to_s+',' if @adjacent_days_change_month}
         #{'doneRendering:'+@done_rendering+',' if !@done_rendering.nil?}
+        #{'forceSixRows:'+@force_six_rows.to_s+',' if @force_six_rows}
         #{ if @constraints.length >0
              build_from_hash_safety @constraints, 'constraints'
            end}
+        #{if @has_multiday
+          "multiDayEvents: {
+            startDate: 'startDate',
+            endDate: 'endDate'
+          },"
+                   end}
         #{if @events.length > 0
             'events:['+build_events(@events)+']'
           end}
           });")
+
+
       end
   end
 
@@ -91,15 +102,18 @@ class Clndr
   end
 
   def add_event(date,title,*other_data)
-    if date.class == Time
-     date=date.strftime("%F")
-    elsif date.match(/\d{4}\-\d{2}\-\d{2}/)
-     date = date
-    else
-      raise Clndr::Error::WrongDateFormat
-    end
+    date = format_date date
     event = {date: date,title:title}
-    event.merge! other_data.first
+    event.merge! *other_data
+    @events.push event
+  end
+
+  def add_multiday_event(start_date,end_date,title,*other_data)
+    start_date = format_date start_date
+    end_date = format_date end_date
+    event = {start_date:start_date,end_date:end_date,title:title}
+    event.merge! *other_data
+    @has_multiday ||= true
     @events.push event
   end
 
@@ -120,9 +134,23 @@ class Clndr
   def build_events(array_of_events)
     list_of_events=''
     array_of_events.each do |event|
-      list_of_events +="{ date: '#{event.delete(:date)}', title: '#{event.delete(:title)}', #{event.map{|k,v| "#{k}:'#{v}'"}.join(',')}},"
+      list_of_events +="{#{'date:\''+event.delete(:date)+'\',' if !event[:date].nil?}
+                          #{'startDate: \''+event.delete(:start_date)+'\','+
+                            'endDate: \'' + event.delete(:end_date)+'\','if !event[:start_date].nil?}
+                          title: '#{event.delete(:title)}',
+                          #{event.map{|k,v| "#{k}:'#{v}'"}.join(',')}},"
     end
     list_of_events
+  end
+
+  def format_date(date)
+    if date.class == Time
+      date.strftime("%F")
+    elsif date.match(/\d{4}\-\d{2}\-\d{2}/)
+      date
+    else
+      raise Clndr::Error::WrongDateFormat
+    end
   end
 
 end

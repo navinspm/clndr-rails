@@ -11,6 +11,7 @@ class Clndr
   @@adjacent_days_change_month=false
   @@done_rendering=nil
   @@constraints ={}
+  @@force_six_rows= true
 
 
 
@@ -82,6 +83,10 @@ class Clndr
     else
       raise Clndr::Error::WrongDateFormat
     end
+  end
+
+  def forceSixRows=(boolean)
+    @@force_six_rows= boolean
   end
 
 end
