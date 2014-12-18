@@ -34,6 +34,39 @@ class Clndr
 
     Blank=nil
 
+    Mini = "'#{content_tag(:div,class:'controls') do
+      content_tag(:div,"<", class:"clndr-previous-button")+
+      content_tag(:div,"<%= month %>".html_safe, class:"month")+
+      content_tag(:div,'>',class:"clndr-next-button")
+    end+
+
+    content_tag(:div,class:"days-container") do
+      content_tag(:div,class:"days") do
+        content_tag(:div, class:"headers") do
+             "<% _.each(daysOfTheWeek, function(day) { %>".html_safe+
+             content_tag(:div,"<%= day %>".html_safe, class:"day-header")+
+             "<% }); %>".html_safe+
+             '<% _.each(days, function(day) { %><div class="<%= day.classes %>" id="<%= day.id %>"><%= day.day %></div><% }); %>'.html_safe+
+             content_tag(:div,class:"events") do
+         content_tag(:div,class:"headers") do
+           content_tag(:div,'x',class:"x-button")+
+               content_tag(:div,'EVENTS',class:"event-header")
+         end+
+             content_tag(:div,class:"events-list") do
+               '<% _.each(eventsThisMonth, function(event) { %>'.html_safe+
+                   content_tag(:div,class:"event") do
+                     '<a href="<%= event.url %>"><%= moment(event.date).format("MMMM Do") %>: <%= event.title %></a>'.html_safe
+                   end+
+                   '<% }); %>'.html_safe
+             end
+      end
+
+
+    end
+      end
+      end}'"
+
+
     def self.from_html(selector)
       "$(\"#{selector}\").html()".html_safe
     end
