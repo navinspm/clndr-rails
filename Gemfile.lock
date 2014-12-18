@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    clndr-rails (1.2.5)
+    clndr-rails (1.2.5.1)
       jquery-rails
       momentjs-rails
       rails (~> 4.1.0)

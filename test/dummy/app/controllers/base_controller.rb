@@ -2,7 +2,7 @@ class BaseController < ApplicationController
   def index
     @full = Clndr.new(:full)
     @full.add_event(Time.now, 'Это событие', location:"Пермь")
-    @full.click_event[:nextMonth]='function(){alert("ffff")}'
+    @full.click_event[:onMonthChange]='function(){alert("ffff")}'
 
     # @full = Clndr.new(:full)
     # @full.add_event Time.now, 'Test', location: 'NY'

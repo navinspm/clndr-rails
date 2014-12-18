@@ -29,6 +29,16 @@ and include css if you want use built in templates. Add into `app/assets/stylesh
 *= require clndr-rails
 ```
 
+###Create calendar
+
+###Helpers
+Generate link that change
+```
+next_month_link(calendar_name, text, html_options)
+```
+In each link helper you can pass empty block or block with true to activate events call backs
+
+
 ###Templates
 CLNDR.js doesn't generate HTML,it inject data to yours template.
 If you want quick start you can use built in gem templates.

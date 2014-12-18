@@ -21,7 +21,12 @@ class Clndr
 
   # return calendar from calendars bean
   def self.get_calendar(calendar)
-    ObjectSpace.each_object(self) {|cal| return cal if cal.name.to_sym == calendar  }
+    clndr = ObjectSpace.each_object(self) {|cal| return cal if cal.name.to_sym == calendar  }
+    if clndr.class == Clndr
+      clndr
+    else
+      raise Clndr::Error::CalendarNotFound, "Calndear with name #{scope} not found. Use Clndr.new(:#{scope}) to create them"
+    end
   end
 
   attr_accessor :template, :weak_offset, :days_of_the_weak,:show_adjacent_months, :adjacent_days_change_month, :done_rendering, :events, :constraints
@@ -48,7 +53,7 @@ class Clndr
   def view(args)
     content_tag(:div,nil,args)do
       content_tag(:div,nil,id:"#{@name}-clndr",class:'clearfix')+
-      javascript_tag("$('##{@name}-clndr').clndr({
+      javascript_tag("var #{@name} = $('##{@name}-clndr').clndr({
         #{'template:'+@template+',' if !@template.nil?}
         #{'weekOffset:'+@weak_offset.to_s+',' if @weak_offset}
         #{'startWithMonth:\''+@start_with_month.to_s+'\',' if !@start_with_month.nil?}
