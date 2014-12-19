@@ -17,15 +17,20 @@ class Clndr
   include ActionView::Helpers
   include ActionView::Context
   include ActiveSupport::Inflector
+  @@calendar_bean = {}
 
+  class << self
 
-  # return calendar from calendars bean
-  def self.get_calendar(calendar)
-    clndr = ObjectSpace.each_object(self) {|cal| return cal if cal.name.to_sym == calendar  }
-    if clndr.class == Clndr
-      clndr
-    else
-      raise Clndr::Error::CalendarNotFound, "Calndear with name #{scope} not found. Use Clndr.new(:#{scope}) to create them"
+    attr_accessor :calendar_bean
+
+    # return calendar from calendars bean
+    def get_calendar(calendar)
+      clndr = @@calendar_bean[calendar.to_sym]
+      if clndr.class == Clndr
+        clndr
+      else
+        raise Clndr::Error::CalendarNotFound, "Calndear with name #{calendar} not found. Use Clndr.new(:#{calendar}) to create them"
+      end
     end
   end
 
@@ -35,7 +40,7 @@ class Clndr
 
 
   def initialize(name)
-    @name = name.to_s
+    @name = name.to_sym
     @template = @@template
     @weak_offset = @@weak_offset
     @start_with_month =@@start_with_month
@@ -49,6 +54,7 @@ class Clndr
     @force_six_rows =@@force_six_rows
     @has_multiday= false
     @events =[]
+    @@calendar_bean.merge! Hash[@name,self]
   end
 
   #   return html of calendar
@@ -106,6 +112,7 @@ class Clndr
     event = {date: date,title:title}
     event.merge! *other_data
     @events.push event
+
   end
 
   def add_multiday_event(start_date,end_date,title,*other_data)
@@ -140,6 +147,7 @@ class Clndr
                           title: '#{event.delete(:title)}',
                           #{event.map{|k,v| "#{k}:'#{v}'"}.join(',')}},"
     end
+    # @events = nil
     list_of_events
   end
 
