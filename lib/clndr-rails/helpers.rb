@@ -1,11 +1,14 @@
   module Helpers
     include ActionView::Helpers::UrlHelper
+
+    # find calendar and call .view with options
     def show_calendar(scope,*args)
       options = {}
       args.map{|x| options.merge! x}
       Clndr.get_calendar(scope.to_sym).view(options)
     end
 
+    # generate links for calendar
     def next_month_link(scope,name,*args,&block)
       args.push(:onclick => "#{Clndr.get_calendar(scope.to_sym).name}.forward(#{'{withCallbacks: true}' if block_given?}); return false")
       options = {}

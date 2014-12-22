@@ -14,8 +14,8 @@ class Clndr
   @@force_six_rows= true
 
 
-
-   def self.configure
+  # rails like config
+  def self.configure
     yield self
   end
 
@@ -24,6 +24,8 @@ class Clndr
   end
 
   def self.weak_offset=(offset)
+
+    # convert offset to CLNDR format
     if offset
       @@weak_offset = 1
     else
@@ -49,10 +51,12 @@ class Clndr
     @@show_adjacent_months = boolean
   end
 
+  # access to click_events hash
   def self.click_events
     yield @@click_events
   end
 
+  # access to target hash
   def self.targets
     yield @@targets
   end
@@ -61,8 +65,8 @@ class Clndr
     @@adjacent_days_change_month= boolean
   end
 
-  def self.done_rendering=(jsfnction)
-    @@done_rendering = jsfnction
+  def self.done_rendering=(jsfunction)
+    @@done_rendering = jsfunction
   end
 
   def self.constraints_start=(date)

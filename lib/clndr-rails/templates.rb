@@ -32,8 +32,11 @@ class Clndr
             end
             }'"
 
+    # blank template
+    # CLNDR generate simple table
     Blank=nil
 
+    #  mini template
     Mini = "'#{
               content_tag(:div,class:'controls') do
                 content_tag(:div,"<", class:"clndr-previous-button")+
@@ -66,7 +69,7 @@ class Clndr
 
 
               }'"
-
+    # simple template without month change control
     Simple="'#{
               content_tag(:div,'<%= month %>'.html_safe,class:"month-bar")+
               content_tag(:div,class:"clndr-grid")do
@@ -83,7 +86,7 @@ class Clndr
               end
               }'"
 
-
+    # get template from html by selector
     def self.from_html(selector)
       "$(\"#{selector}\").html()".html_safe
     end

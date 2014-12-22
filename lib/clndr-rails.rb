@@ -14,6 +14,7 @@ class Clndr
   require 'clndr-rails/config'
 
 
+
   include ActionView::Helpers
   include ActionView::Context
   include ActiveSupport::Inflector
@@ -34,7 +35,9 @@ class Clndr
     end
   end
 
-  attr_accessor :template, :weak_offset, :days_of_the_weak,:show_adjacent_months, :adjacent_days_change_month, :done_rendering, :events, :constraints
+  attr_accessor :template, :weak_offset, :days_of_the_weak,
+                :show_adjacent_months, :adjacent_days_change_month,
+                :done_rendering, :events, :constraints
   attr_reader :name
 
 
@@ -59,6 +62,7 @@ class Clndr
 
   #   return html of calendar
   def view(args)
+
     if @template == Clndr::Template::Full
       css_class = 'full-clndr-template'
     elsif @template == Clndr::Template::Mini
@@ -97,23 +101,23 @@ class Clndr
       end
   end
 
-  # if date is instance of Time convert to "YYYY-MM-DD" формат
+  # if date is instance of Time convert to "YYYY-MM-DD" format
   def start_with_month=(date)
-    if date.class == Time
-      @start_with_month= date.strftime("%F")
-    else
-      @start_with_month = date
-    end
+      @start_with_month = format_date date
   end
 
+  # access to click_events hash
   def click_event
     @click_events
   end
 
+  # access to targets hash
   def target
     @targets
   end
 
+  # add event to events array
+  # *other_data some data for tour acess in template
   def add_event(date,title,*other_data)
     date = format_date date
     event = {date: date,title:title}
@@ -122,6 +126,7 @@ class Clndr
 
   end
 
+  # add multiday event
   def add_multiday_event(start_date,end_date,title,*other_data)
     start_date = format_date start_date
     end_date = format_date end_date
@@ -133,18 +138,24 @@ class Clndr
 
   private
 
-    def build_from_hash(hash, parametr)
+    # build string from hash to parameter
+    # this unsafe methode use only for function or true/false valuse
+    # if you need generate js string (eg param:'some value') use
+    # .build_from_hash_safety
+    def build_from_hash(hash, parameter)
       if hash.length > 0
-        "#{parametr}: {#{hash.map{|k,v|"#{k}:#{v},"}.join()}},"
+        "#{parameter}: {#{hash.map{|k,v|"#{k}:#{v},"}.join()}},"
       end
     end
 
-  def build_from_hash_safety(hash, parametr)
+  # build string from hash to parameter like js string
+  def build_from_hash_safety(hash, parameter)
     if hash.length > 0
-      "#{parametr}: {#{hash.map{|k,v|"#{k}:'#{v}',"}.join()}},"
+      "#{parameter}: {#{hash.map{|k,v|"#{k}:'#{v}',"}.join()}},"
     end
   end
 
+  # generate events array from @event
   def build_events(array_of_events)
     list_of_events=''
     array_of_events.each do |event|
@@ -154,10 +165,13 @@ class Clndr
                           title: '#{event.delete(:title)}',
                           #{event.map{|k,v| "#{k}:'#{v}'"}.join(',')}},"
     end
-    # @events = nil
+
+    # return string with events
     list_of_events
   end
 
+  # check date to available format
+  # if date is Time instance, convert to available string
   def format_date(date)
     if date.class == Time
       date.strftime("%F")
@@ -169,3 +183,4 @@ class Clndr
   end
 
 end
+
