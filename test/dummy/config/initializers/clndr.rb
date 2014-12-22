@@ -20,7 +20,8 @@ Clndr.configure do |config|
   config.show_adjacent_months= true
   config.adjacent_days_change_month= true
   config.done_rendering='function(){}' # or nil
-  config.constraints_end= Time.now+1.month
+  config.constraints_start= nil
+  config.constraints_end= nil
 
 
 end

@@ -1,7 +1,7 @@
 class BaseController < ApplicationController
   def index
     @full = Clndr.new(:test)
-    @full.add_event(Time.now, 'Это событие', location:"Пермь")
+    @full.add_event(Time.now, 'Это событие')
     @full.add_multiday_event(Time.now+1.day,Time.now+3.day,'Мулти',location:"Russia")
     @full.start_with_month = Time.now
     @full.template= Clndr::Template::Mini

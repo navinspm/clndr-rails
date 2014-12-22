@@ -117,7 +117,7 @@ class Clndr
   def add_event(date,title,*other_data)
     date = format_date date
     event = {date: date,title:title}
-    event.merge! *other_data
+    event.merge! *other_data if other_data.length>0
     @events.push event
 
   end
@@ -126,7 +126,7 @@ class Clndr
     start_date = format_date start_date
     end_date = format_date end_date
     event = {start_date:start_date,end_date:end_date,title:title}
-    event.merge! *other_data
+    event.merge! *other_data if other_data.length >0
     @has_multiday ||= true
     @events.push event
   end
