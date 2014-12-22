@@ -1,5 +1,5 @@
 Clndr.configure do |config|
-  config.template = Clndr::Template::FullCalendar
+  config.template = Clndr::Template::Full
   config.weak_offset = false
   config.start_with_month = '2014-11-01'
   config.days_of_the_weak =["П","В", "С","ч","п","СБ","вс"]

@@ -1,9 +1,17 @@
 class BaseController < ApplicationController
   def index
-    @full = Clndr.new(:full)
+    @full = Clndr.new(:test)
     @full.add_event(Time.now, 'Это событие', location:"Пермь")
     @full.add_multiday_event(Time.now+1.day,Time.now+3.day,'Мулти',location:"Russia")
     @full.start_with_month = Time.now
+    @full.template= Clndr::Template::Mini
+    @full.click_event[:click]="function(target) {
+        if(target.events.length) {
+          var daysContainer = $('##{@full.name}-clndr').find('.days-container');
+          daysContainer.toggleClass('show-events', true);
+          $('##{@full.name}-clndr').find('.x-button').click( function() {
+            daysContainer.toggleClass('show-events', false);
+          });}}"
 
     # @full.click_event[:onMonthChange]='function(){alert("ffff")}'
 

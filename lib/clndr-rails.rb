@@ -59,8 +59,15 @@ class Clndr
 
   #   return html of calendar
   def view(args)
+    if @template == Clndr::Template::Full
+      css_class = 'full-clndr-template'
+    elsif @template == Clndr::Template::Mini
+      css_class = 'mini-clndr-template'
+    elsif @template == Clndr::Template::Simple
+      css_class = 'simple-clndr-template'
+    end
     content_tag(:div,nil,args)do
-      content_tag(:div,nil,id:"#{@name}-clndr",class:'clearfix')+
+      content_tag(:div,nil,id:"#{@name}-clndr",class:"clearfix #{css_class}")+
       javascript_tag("var #{@name} = $('##{@name}-clndr').clndr({
         #{'template:'+@template+',' if !@template.nil?}
         #{'weekOffset:'+@weak_offset.to_s+',' if @weak_offset}
