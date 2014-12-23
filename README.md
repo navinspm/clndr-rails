@@ -115,13 +115,13 @@ Code below demonstrate avelible settings and theirs defaults
       config.template = Clndr::Template::FullCalendar
 
       # start the week off on Sunday (true), Monday (false)
-      config.weak_offset = false
+      config.week_offset = false
 
       # determines which month to start with using either a date string in format `YYYY-MM-DD`, instance of `Time` class or `nil` (if use nil Clndr will use current month)
       config.start_with_month = nil
 
       # Array of days ['M','T','W','T','F','S','S'] or nil (use moment() object)
-      config.days_of_the_weak =nil
+      config.days_of_the_week =nil
 
       # Configure callbask. Get argument string of js function
        config.click_events do |event|
@@ -162,8 +162,9 @@ Code below demonstrate avelible settings and theirs defaults
        config.done_rendering='function(){}' # or nil
 
        # Set range of dates for calendar
-       config.constraints_start= nil
-       config.constraints_end= nil
+       # By default dont used
+       config.constraints_start= Time.now
+       config.constraints_end= Time.now
 ```
 
 ###i18n

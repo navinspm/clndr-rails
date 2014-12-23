@@ -18,15 +18,14 @@ class Clndr
   include ActionView::Helpers
   include ActionView::Context
   include ActiveSupport::Inflector
-  @@calendar_bean = {}
+  @@calendar_basket = {}
+  cattr_reader :calendar_basket
 
   class << self
 
-    attr_accessor :calendar_bean
-
     # return calendar from calendars bean
     def get_calendar(calendar)
-      clndr = @@calendar_bean[calendar.to_sym]
+      clndr = @@calendar_basket[calendar.to_sym]
       if clndr.class == Clndr
         clndr
       else
@@ -35,9 +34,9 @@ class Clndr
     end
   end
 
-  attr_accessor :template, :weak_offset, :days_of_the_weak,
+  attr_accessor :template, :week_offset, :days_of_the_week,
                 :show_adjacent_months, :adjacent_days_change_month,
-                :done_rendering, :events, :constraints
+                :done_rendering, :events, :force_six_rows, :start_with_month
   attr_reader :name
 
 
@@ -45,19 +44,19 @@ class Clndr
   def initialize(name)
     @name = name.to_sym
     @template = @@template
-    @weak_offset = @@weak_offset
+    @week_offset = @@week_offset
     @start_with_month =@@start_with_month
-    @days_of_the_weak = @@days_of_the_weak
+    @days_of_the_week = @@days_of_the_week
     @click_events = @@click_events.clone
     @targets= @@targets.clone
     @show_adjacent_months= @@show_adjacent_months
     @adjacent_days_change_month = @@adjacent_days_change_month
-    @done_rendering = @done_rendering
+    @done_rendering = @@done_rendering
     @constraints =@@constraints
     @force_six_rows =@@force_six_rows
     @has_multiday= false
     @events =[]
-    @@calendar_bean.merge! Hash[@name,self]
+    @@calendar_basket.merge! Hash[@name,self]
   end
 
   #   return html of calendar
@@ -74,9 +73,9 @@ class Clndr
       content_tag(:div,nil,id:"#{@name}-clndr",class:"clearfix #{css_class}")+
       javascript_tag("var #{@name} = $('##{@name}-clndr').clndr({
         #{'template:'+@template+',' if !@template.nil?}
-        #{'weekOffset:'+@weak_offset.to_s+',' if @weak_offset}
+        #{'weekOffset:'+@week_offset.to_s+',' if @week_offset}
         #{'startWithMonth:\''+@start_with_month.to_s+'\',' if !@start_with_month.nil?}
-        #{'daysOfTheWeek:'+@days_of_the_weak.to_s+',' if !@days_of_the_weak.nil?}
+        #{'daysOfTheWeek:'+@days_of_the_week.to_s+',' if !@days_of_the_week.nil?}
         #{build_from_hash(@click_events,'clickEvents')}
         #{build_from_hash_safety(@targets,'targets')}
         #{'showAdjacentMonths:'+@show_adjacent_months.to_s+',' if !@show_adjacent_months}
@@ -101,6 +100,14 @@ class Clndr
       end
   end
 
+  def week_offset=(boolean)
+    if boolean
+      @week_offset =1
+    else
+      @week_offset =0
+    end
+  end
+
   # if date is instance of Time convert to "YYYY-MM-DD" format
   def start_with_month=(date)
       @start_with_month = format_date date
@@ -114,6 +121,22 @@ class Clndr
   # access to targets hash
   def target
     @targets
+  end
+
+  def constraints_start
+    @constraints[:startDate]
+  end
+
+  def constraints_start=(date)
+    @constraints[:startDate] = format_date date
+  end
+
+  def constraints_end
+    @constraints[:endDate]
+  end
+
+  def constraints_end=(date)
+    @constraints[:endDate] = format_date date
   end
 
   # add event to events array

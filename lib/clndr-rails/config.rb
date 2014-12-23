@@ -2,7 +2,7 @@ class Clndr
 
   # default config
   @@template = Clndr::Template::Blank
-  @@weak_offset = true
+  @@week_offset = true
   @@start_with_month = nil
   @@days_of_the_week = nil
   @@click_events={}
@@ -13,7 +13,8 @@ class Clndr
   @@constraints ={}
   @@force_six_rows= true
 
-
+  # todo check days of week for 7 length
+  # todo check for avalible events and targets
   # rails like config
   def self.configure
     yield self
@@ -23,13 +24,13 @@ class Clndr
     @@template ||= template
   end
 
-  def self.weak_offset=(offset)
+  def self.week_offset=(offset)
 
     # convert offset to CLNDR format
     if offset
-      @@weak_offset = 1
+      @@week_offset = 1
     else
-      @@weak_offset = 0
+      @@week_offset = 0
     end
   end
 
@@ -43,8 +44,8 @@ class Clndr
     end
   end
 
-  def self.days_of_the_weak=(array_of_days)
-    @@days_of_the_weak=array_of_days
+  def self.days_of_the_week=(array_of_days)
+    @@days_of_the_week=array_of_days
   end
 
   def self.show_adjacent_months=(boolean)
@@ -89,7 +90,7 @@ class Clndr
     end
   end
 
-  def forceSixRows=(boolean)
+  def self.force_six_rows=(boolean)
     @@force_six_rows= boolean
   end
 
