@@ -2,7 +2,7 @@ class Clndr
 
   # default config
   @@template = Clndr::Template::Blank
-  @@week_offset = true
+  @@week_offset = 1
   @@start_with_month = nil
   @@days_of_the_week = nil
   @@click_events={}
@@ -96,7 +96,7 @@ class Clndr
 
   def self.default_settings
     @@template = Clndr::Template::Blank
-    @@week_offset = true
+    @@week_offset = 1
     @@start_with_month = nil
     @@days_of_the_week = nil
     @@click_events={}

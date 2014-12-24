@@ -36,8 +36,8 @@ class Clndr
 
   attr_accessor :template, :week_offset, :days_of_the_week,
                 :show_adjacent_months, :adjacent_days_change_month,
-                :done_rendering, :events, :force_six_rows, :start_with_month
-  attr_reader :name
+                :done_rendering, :force_six_rows, :start_with_month
+  attr_reader :name, :events
 
 
 
@@ -61,7 +61,6 @@ class Clndr
 
   #   return html of calendar
   def view(args=nil)
-
     if @template == Clndr::Template::Full
       css_class = 'full-clndr-template'
     elsif @template == Clndr::Template::Mini
@@ -73,7 +72,7 @@ class Clndr
       content_tag(:div,nil,id:"#{@name}-clndr",class:"clearfix #{css_class}")+
       javascript_tag("var #{@name} = $('##{@name}-clndr').clndr({
         #{'template:'+@template+',' if !@template.nil?}
-        #{'weekOffset:'+@week_offset.to_s+',' if @week_offset}
+        #{'weekOffset:'+@week_offset.to_s+',' if @week_offset==1}
         #{'startWithMonth:\''+@start_with_month.to_s+'\',' if !@start_with_month.nil?}
         #{'daysOfTheWeek:'+@days_of_the_week.to_s+',' if !@days_of_the_week.nil?}
         #{build_from_hash(@click_events,'clickEvents')}
@@ -92,9 +91,9 @@ class Clndr
           },"
                    end}
         #{if @events.length > 0
-            'events:['+build_events(@events)+']'
+            'events:['+build_events+']'
           end}
-          });")
+          });".gsub(/\n\s*\n/,"\n"))
 
 
       end
@@ -102,7 +101,7 @@ class Clndr
 
   def week_offset=(boolean)
     if boolean
-      @week_offset =1
+      @week_offset=1
     else
       @week_offset =0
     end
@@ -179,14 +178,16 @@ class Clndr
   end
 
   # generate events array from @event
-  def build_events(array_of_events)
+  def build_events
     list_of_events=''
-    array_of_events.each do |event|
-      list_of_events +="{#{'date:\''+event.delete(:date)+'\',' if !event[:date].nil?}
-                          #{'startDate: \''+event.delete(:start_date)+'\','+
-                            'endDate: \'' + event.delete(:end_date)+'\','if !event[:start_date].nil?}
-                          title: '#{event.delete(:title)}',
-                          #{event.map{|k,v| "#{k}:'#{v}'"}.join(',')}},"
+    @events.delete_if do |event|
+      list_of_events +="{
+          #{'date:\''+event.delete(:date)+'\',' if !event[:date].nil?}
+          #{'startDate: \''+event.delete(:start_date)+'\','+
+            'endDate: \'' + event.delete(:end_date)+'\','if !event[:start_date].nil?}
+          title: '#{event.delete(:title)}',
+          #{event.map{|k,v| "#{k}:'#{v}'"}.join(',')}},".gsub(/\n\s*\n/,"\n")
+
     end
 
     # return string with events
