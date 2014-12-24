@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/sedx/clndr-rails.svg?branch=master)](https://travis-ci.org/sedx/clndr-rails)
+[![Build Status](https://travis-ci.org/sedx/clndr-rails.svg?branch=master)](https://travis-ci.org/sedx/clndr-rails) [![Code Climate](https://codeclimate.com/github/sedx/clndr-rails/badges/gpa.svg)](https://codeclimate.com/github/sedx/clndr-rails) [![Code Climate](https://codeclimate.com/github/sedx/clndr-rails/badges/gpa.svg)](https://codeclimate.com/github/sedx/clndr-rails)
 #Clndr Rails
 Simple way to insert calendar view into your rails app
 This gem based on [CLNDR.js](http://kylestetz.github.io/CLNDR/)

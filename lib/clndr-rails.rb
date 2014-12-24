@@ -76,13 +76,13 @@ class Clndr
         #{'startWithMonth:\''+@start_with_month.to_s+'\',' if !@start_with_month.nil?}
         #{'daysOfTheWeek:'+@days_of_the_week.to_s+',' if !@days_of_the_week.nil?}
         #{build_from_hash(@click_events,'clickEvents')}
-        #{build_from_hash_safety(@targets,'targets')}
+        #{build_from_hash(@targets,'targets',true)}
         #{'showAdjacentMonths:'+@show_adjacent_months.to_s+',' if !@show_adjacent_months}
         #{'adjacentDaysChangeMonth:'+@adjacent_days_change_month.to_s+',' if @adjacent_days_change_month}
         #{'doneRendering:'+@done_rendering+',' if !@done_rendering.nil?}
         #{'forceSixRows:'+@force_six_rows.to_s+',' if @force_six_rows}
         #{ if @constraints.length >0
-             build_from_hash_safety @constraints, 'constraints'
+             build_from_hash @constraints, 'constraints', true
            end}
         #{if @has_multiday
           "multiDayEvents: {
@@ -164,18 +164,12 @@ class Clndr
     # this unsafe methode use only for function or true/false valuse
     # if you need generate js string (eg param:'some value') use
     # .build_from_hash_safety
-    def build_from_hash(hash, parameter)
+    def build_from_hash(hash, parameter,safety=false)
       if hash.length > 0
-        "#{parameter}: {#{hash.map{|k,v|"#{k}:#{v},"}.join()}},"
+        "#{parameter}: {#{hash.map{|k,v|"#{k}:#{'\'' if safety}#{v}#{'\'' if safety},"}.join()}},"
       end
     end
 
-  # build string from hash to parameter like js string
-  def build_from_hash_safety(hash, parameter)
-    if hash.length > 0
-      "#{parameter}: {#{hash.map{|k,v|"#{k}:'#{v}',"}.join()}},"
-    end
-  end
 
   # generate events array from @event
   def build_events
@@ -205,6 +199,7 @@ class Clndr
       raise Clndr::Error::WrongDateFormat
     end
   end
+
 
 end
 

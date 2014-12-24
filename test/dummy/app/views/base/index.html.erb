@@ -1,3 +1,7 @@
 
 <h1>Example full calndar </h1>
 <%= show_calendar(:test,style:"width:600px",id:'ff') %>
+<%= next_month_link(:test,'Next',style:'color:red;',class:'nav'){true} %>
+<%= previous_month_link(:test,'Prev',style:'color:red;',class:'nav'){true} %>
+<%= next_year_link(:test,'NextY',style:'color:red;',class:'nav'){true} %>
+<%= previous_year_link(:test,'PrevY',style:'color:red;',class:'nav'){true} %>
