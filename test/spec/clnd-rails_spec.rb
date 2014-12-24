@@ -1,4 +1,5 @@
 require_relative './spec_helper'
+
 describe Clndr do
   context 'Templates' do
     it 'should have Full template' do
@@ -143,6 +144,98 @@ describe Clndr do
         @calendar.force_six_rows = false
       end
       it_should_behave_like 'configurable'
+    end
+
+    it 'should fall to default settings when #defaul_settings call' do
+      Clndr.default_settings
+      expect(Clndr.new(:test).template).to eq(Clndr::Template::Blank)
+    end
+
+  end
+
+  context 'should genearate html' do
+    before :all do
+      Clndr.default_settings
+      @test = Clndr.new(:test)
+    end
+
+    it 'by .view method' do
+      expect(@test.view).to include('id="test-clndr"')
+    end
+
+    it 'by .view method with html_options' do
+      expect(@test.view(id:'some-test-id')).to include('some-test-id')
+      expect(@test.view(id:'some-test-id', class:'some-test-class')).to include('some-test-class')
+    end
+
+    it 'by show_calendar method' do
+      expect(show_calendar(:test)).to eq(@test.view)
+    end
+
+    it 'by show_calendar with html_options' do
+      expect(show_calendar(:test,id:'some-test-id',class:'some-test-class')).to eq(@test.view(id:'some-test-id',class:'some-test-class'))
+    end
+
+    context 'with clndr option' do
+      shared_examples 'valid generator' do
+
+        it 'return nothing if parametr is default' do
+          expect(@test.view).not_to include("#{parameter}:#{value}")
+        end
+
+        it 'return valid parametr' do
+        @test.send(option,value)
+        expect(@test.view).to include("#{parameter}:#{valid_value}")
+        end
+
+      end
+
+      context 'template' do
+        it_should_behave_like 'valid generator' do
+         let(:option){ :template=}
+         let(:value){Clndr::Template::Simple}
+         let(:valid_value){value}
+         let(:parameter){'template'}
+        end
+      end
+
+      context 'week_offset' do
+        it_should_behave_like 'valid generator' do
+          let(:option){ :week_offset=}
+          let(:value){false}
+          let(:valid_value){0}
+          let(:parameter){'weekOffset'}
+        end
+      end
+
+      context 'days_of_the_week' do
+        it_should_behave_like 'valid generator' do
+          let(:option){ :days_of_the_week=}
+          let(:value){['x']*6}
+          let(:valid_value){value}
+          let(:parameter){'daysOfTheWeek'}
+        end
+      end
+
+      context 'show_adjacent_months' do
+        it_should_behave_like 'valid generator' do
+          let(:option){ :show_adjacent_months=}
+          let(:value){false}
+          let(:valid_value){value}
+          let(:parameter){'showAdjacentMonths'}
+        end
+      end
+
+
+
+      context 'click_events' do
+      #   todo this context cant use shared_example add custom test
+      end
+
+      context 'targets' do
+        #   todo this context cant use shared_example add custom test
+      end
+
     end
   end
 end

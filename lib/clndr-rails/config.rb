@@ -94,4 +94,19 @@ class Clndr
     @@force_six_rows= boolean
   end
 
+  def self.default_settings
+    @@template = Clndr::Template::Blank
+    @@week_offset = true
+    @@start_with_month = nil
+    @@days_of_the_week = nil
+    @@click_events={}
+    @@targets={}
+    @@show_adjacent_months= true
+    @@adjacent_days_change_month=false
+    @@done_rendering=nil
+    @@constraints ={}
+    @@force_six_rows= true
+    self
+  end
+
 end

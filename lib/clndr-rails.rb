@@ -60,7 +60,7 @@ class Clndr
   end
 
   #   return html of calendar
-  def view(args)
+  def view(args=nil)
 
     if @template == Clndr::Template::Full
       css_class = 'full-clndr-template'
