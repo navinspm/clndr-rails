@@ -40,7 +40,7 @@ describe 'Clndr generate html' do
     context 'template' do
       it_should_behave_like 'valid generator' do
         let(:option){ :template=}
-        let(:value){Clndr::Template::Simple}
+        let(:value){Clndr::Template::SIMPLE}
         let(:valid_value){value}
         let(:parameter){'template'}
       end
@@ -86,7 +86,7 @@ describe 'Clndr generate html' do
       it_should_behave_like 'valid generator' do
         let(:option){ :constraints_end=}
         let(:value){Time.now}
-        let(:valid_value){" {endDate:'#{Time.now.strftime("%F")}'"}
+        let(:valid_value){" {endDate:'#{Time.now.strftime('%F')}'"}
         let(:parameter){'constraints'}
       end
     end
@@ -95,25 +95,25 @@ describe 'Clndr generate html' do
       it_should_behave_like 'valid generator' do
         let(:option){ :constraints_start=}
         let(:value){Time.now}
-        let(:valid_value){" {startDate:'#{Time.now.strftime("%F")}'"}
+        let(:valid_value){" {startDate:'#{Time.now.strftime('%F')}'"}
         let(:parameter){'constraints'}
       end
     end
 
     context 'click_events' do
       it 'return nothing if parametr is default' do
-        expect(@test.view).not_to include("clickEvent")
+        expect(@test.view).not_to include('clickEvent')
       end
 
       it 'return valid parametr' do
         @test.click_event[:click]='some_js(){}'
-        expect(@test.view).to include("clickEvents: {click:some_js(){},}")
+        expect(@test.view).to include('clickEvents: {click:some_js(){},}')
       end
     end
 
     context 'targets' do
       it 'return nothing if parametr is default' do
-        expect(@test.view).not_to include("targets")
+        expect(@test.view).not_to include('targets')
       end
 
       it 'return valid parametr' do
@@ -124,23 +124,23 @@ describe 'Clndr generate html' do
 
     context 'force_six_rows' do
       it 'return true if parametr is default' do
-        expect(@test.view).to include("forceSixRows:true")
+        expect(@test.view).to include('forceSixRows:true')
       end
 
       it 'return nothing if false' do
         @test.force_six_rows= false
-        expect(@test.view).not_to include("forceSixRows:")
+        expect(@test.view).not_to include('forceSixRows:')
       end
     end
 
     context 'week_offset' do
       it 'return 1 if parametr is default' do
-        expect(@test.view).to include("weekOffset:1")
+        expect(@test.view).to include('weekOffset:1')
       end
 
       it 'return nothing if 0' do
         @test.week_offset = false
-        expect(@test.view).not_to include("weekOffset:0")
+        expect(@test.view).not_to include('weekOffset:0')
       end
     end
 

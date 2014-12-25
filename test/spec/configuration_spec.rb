@@ -4,7 +4,7 @@ describe 'Clndr configuration' do
   shared_examples 'configurable' do
 
     it 'should be configurable' do
-      expect(@calendar.template).to eq(Clndr::Template::Simple)
+      expect(@calendar.template).to eq(Clndr::Template::SIMPLE)
     end
 
     it 'should get week_offset from config' do
@@ -55,7 +55,7 @@ describe 'Clndr configuration' do
   context 'init' do
     before :all do
       Clndr.configure do |config|
-        config.template = Clndr::Template::Simple
+        config.template = Clndr::Template::SIMPLE
         config.week_offset = false
         config.start_with_month = '2014-12-31'
         config.days_of_the_week =['x'] * 7
@@ -81,7 +81,7 @@ describe 'Clndr configuration' do
   context 'dinamycaly change config' do
     before :all do
       @calendar = Clndr.new(:test)
-      @calendar.template = Clndr::Template::Simple
+      @calendar.template = Clndr::Template::SIMPLE
       @calendar.week_offset = false
       @calendar.start_with_month = '2014-12-31'
       @calendar.days_of_the_week =['x'] * 7
@@ -99,7 +99,7 @@ describe 'Clndr configuration' do
 
   it 'should fall to default settings when #defaul_settings call' do
     Clndr.default_settings
-    expect(Clndr.new(:test).template).to eq(Clndr::Template::Blank)
+    expect(Clndr.new(:test).template).to eq(Clndr::Template::BLANK)
   end
 
   it 'should raise exception if date format wrong' do

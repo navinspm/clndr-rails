@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/sedx/clndr-rails.svg?branch=master)](https://travis-ci.org/sedx/clndr-rails) [![Code Climate](https://codeclimate.com/github/sedx/clndr-rails/badges/gpa.svg)](https://codeclimate.com/github/sedx/clndr-rails) [![Code Climate](https://codeclimate.com/github/sedx/clndr-rails/badges/gpa.svg)](https://codeclimate.com/github/sedx/clndr-rails)
+[![Build Status](https://travis-ci.org/sedx/clndr-rails.svg?branch=master)](https://travis-ci.org/sedx/clndr-rails) [![Code Climate](https://codeclimate.com/github/sedx/clndr-rails/badges/gpa.svg)](https://codeclimate.com/github/sedx/clndr-rails)
 #Clndr Rails
 Simple way to insert calendar view into your rails app
 This gem based on [CLNDR.js](http://kylestetz.github.io/CLNDR/)
@@ -34,7 +34,7 @@ and include css if you want use built in templates. Add into `app/assets/stylesh
 Create calendar is very simple.
 Just use `Clndr.new(:name_of_clndr)` in your controller or other else.
 You can access to  Clndr by `:name_of_clndr` in helpers
-If you need dynamically change some settings you can assigment your Clndr to instance variable and use config methods, eg:
+If you need dynamically change some settings you can assignment your Clndr to instance variable and use config methods, eg:
 ```
 @simple_clndr = Clndr.new(:simple)
 @simple_clndr.start_with_month = Time.now-1.yaer
@@ -48,7 +48,7 @@ Also you can add multiday event:
 # add_multiday_event(start_date,end_date,name,*other_data)
 @simple_clndr.add_multiday_event('2012-12-1','2012-12-31','December 2012')
 ```
-If you need use public CLNDR API you can use js var that same your Clnd name (see the genereated code).
+If you need use public CLNDR API you can use js var that same your Clnd name (see the generated code).
 
 [More about API](https://github.com/kylestetz/CLNDR#returning-the-instance--public-api)
 
@@ -75,7 +75,7 @@ In each link helper you can pass empty block or block with true to activate even
 CLNDR.js doesn't generate HTML,it inject data to yours template.
 If you want quick start you can use built in gem templates.
 All templates include in `Clndr::Template` module
-Now add two templates `Full`, `Mini` and `Simple`, also you can use `Blank` template (it's empty template and CLNDR.js generate simple html)
+Now add two templates `FULL`, `MINI` and `SIMPLE`, also you can use `BLANK` template (it's empty template and CLNDR.js generate simple html)
 If you need more functionality or want create custom design you must use `Clndr::Template.from_html()` method.
 This metod get one argument selector in JQuery's format (`'#some-id'` or `'.some-class'`)
 This is example of simple template:
@@ -113,7 +113,7 @@ Code below demonstrate avelible settings and theirs defaults
     Clndr.configure do |config|
 
       # you can configure default template, jast use Clndr::Template::<template_name or from_html(selector)>
-      config.template = Clndr::Template::FullCalendar
+      config.template = Clndr::Template::FULL
 
       # start the week off on Sunday (true), Monday (false)
       config.week_offset = false
@@ -124,7 +124,7 @@ Code below demonstrate avelible settings and theirs defaults
       # Array of days ['M','T','W','T','F','S','S'] or nil (use moment() object)
       config.days_of_the_week =nil
 
-      # Configure callbask. Get argument string of js function
+      # Configure callbacks. Get argument string of js function
        config.click_events do |event|
 
       # returns a 'target' object containing the DOM element, any events, and the date as a moment.js object.

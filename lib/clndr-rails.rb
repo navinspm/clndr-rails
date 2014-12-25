@@ -1,5 +1,5 @@
 require 'clndr-rails/engine'
-require "clndr-rails/version"
+require 'clndr-rails/version'
 require 'clndr-rails/errors'
 
 
@@ -29,7 +29,7 @@ class Clndr
       if clndr.class == Clndr
         clndr
       else
-        raise Clndr::Error::CalendarNotFound, "Calndear with name #{calendar} not found. Use Clndr.new(:#{calendar}) to create them"
+        raise Clndr::Error::CalendarNotFound, "Calendar with name #{calendar} not found. Use Clndr.new(:#{calendar}) to create them"
       end
     end
   end
@@ -61,25 +61,30 @@ class Clndr
 
   #   return html of calendar
   def view(args=nil)
-    if @template == Clndr::Template::Full
-      css_class = 'full-clndr-template'
-    elsif @template == Clndr::Template::Mini
-      css_class = 'mini-clndr-template'
-    elsif @template == Clndr::Template::Simple
-      css_class = 'simple-clndr-template'
+
+    case @template
+      when Clndr::Template::FULL
+        css_class = 'full-clndr-template'
+      when Clndr::Template::MINI
+        css_class = 'mini-clndr-template'
+      when Clndr::Template::SIMPLE
+        css_class = 'simple-clndr-template'
+      else
+        css_class = 'blank-clndr-template'
     end
+
     content_tag(:div,nil,args)do
       content_tag(:div,nil,id:"#{@name}-clndr",class:"clearfix #{css_class}")+
       javascript_tag("var #{@name} = $('##{@name}-clndr').clndr({
-        #{'template:'+@template+',' if !@template.nil?}
+        #{'template:'+@template+',' unless @template.nil?}
         #{'weekOffset:'+@week_offset.to_s+',' if @week_offset==1}
-        #{'startWithMonth:\''+@start_with_month.to_s+'\',' if !@start_with_month.nil?}
-        #{'daysOfTheWeek:'+@days_of_the_week.to_s+',' if !@days_of_the_week.nil?}
+        #{'startWithMonth:\''+@start_with_month.to_s+'\',' unless @start_with_month.nil?}
+        #{'daysOfTheWeek:'+@days_of_the_week.to_s+',' unless @days_of_the_week.nil?}
         #{build_from_hash(@click_events,'clickEvents')}
         #{build_from_hash(@targets,'targets',true)}
-        #{'showAdjacentMonths:'+@show_adjacent_months.to_s+',' if !@show_adjacent_months}
+        #{'showAdjacentMonths:'+@show_adjacent_months.to_s+',' unless @show_adjacent_months}
         #{'adjacentDaysChangeMonth:'+@adjacent_days_change_month.to_s+',' if @adjacent_days_change_month}
-        #{'doneRendering:'+@done_rendering+',' if !@done_rendering.nil?}
+        #{'doneRendering:'+@done_rendering+',' unless @done_rendering.nil?}
         #{'forceSixRows:'+@force_six_rows.to_s+',' if @force_six_rows}
         #{ if @constraints.length >0
              build_from_hash @constraints, 'constraints', true
@@ -109,7 +114,7 @@ class Clndr
 
   # if date is instance of Time convert to "YYYY-MM-DD" format
   def start_with_month=(date)
-      @start_with_month = format_date date
+      @start_with_month = Clndr.date_format date
   end
 
   # access to click_events hash
@@ -127,7 +132,7 @@ class Clndr
   end
 
   def constraints_start=(date)
-    @constraints[:startDate] = format_date date
+    @constraints[:startDate] = Clndr.date_format date
   end
 
   def constraints_end
@@ -135,13 +140,13 @@ class Clndr
   end
 
   def constraints_end=(date)
-    @constraints[:endDate] = format_date date
+    @constraints[:endDate] = Clndr.date_format date
   end
 
   # add event to events array
-  # *other_data some data for tour acess in template
+  # *other_data some data for tour access in template
   def add_event(date,title,*other_data)
-    date = format_date date
+    date = Clndr.date_format date
     event = {date: date,title:title}
     event.merge! *other_data if other_data.length>0
     @events.push event
@@ -150,8 +155,8 @@ class Clndr
 
   # add multiday event
   def add_multiday_event(start_date,end_date,title,*other_data)
-    start_date = format_date start_date
-    end_date = format_date end_date
+    start_date = Clndr.date_format start_date
+    end_date = Clndr.date_format end_date
     event = {start_date:start_date,end_date:end_date,title:title}
     event.merge! *other_data if other_data.length >0
     @has_multiday ||= true
@@ -161,12 +166,12 @@ class Clndr
   private
 
     # build string from hash to parameter
-    # this unsafe methode use only for function or true/false valuse
+    # this unsafe method use only for function or true/false value
     # if you need generate js string (eg param:'some value') use
     # .build_from_hash_safety
     def build_from_hash(hash, parameter,safety=false)
       if hash.length > 0
-        "#{parameter}: {#{hash.map{|k,v|"#{k}:#{'\'' if safety}#{v}#{'\'' if safety},"}.join()}},"
+        "#{parameter}: {#{hash.map { |k, v| "#{k}:#{'\'' if safety}#{v}#{'\'' if safety}," }.join}},"
       end
     end
 
@@ -176,9 +181,9 @@ class Clndr
     list_of_events=''
     @events.delete_if do |event|
       list_of_events +="{
-          #{'date:\''+event.delete(:date)+'\',' if !event[:date].nil?}
+          #{'date:\''+event.delete(:date)+'\',' unless event[:date].nil?}
           #{'startDate: \''+event.delete(:start_date)+'\','+
-            'endDate: \'' + event.delete(:end_date)+'\','if !event[:start_date].nil?}
+              'endDate: \'' + event.delete(:end_date)+'\',' unless event[:start_date].nil?}
           title: '#{event.delete(:title)}',
           #{event.map{|k,v| "#{k}:'#{v}'"}.join(',')}},".gsub(/\n\s*\n/,"\n")
 
@@ -187,19 +192,5 @@ class Clndr
     # return string with events
     list_of_events
   end
-
-  # check date to available format
-  # if date is Time instance, convert to available string
-  def format_date(date)
-    if date.class == Time
-      date.strftime("%F")
-    elsif date.match(/\d{4}\-\d{2}\-\d{2}/)
-      date
-    else
-      raise Clndr::Error::WrongDateFormat
-    end
-  end
-
-
 end
 

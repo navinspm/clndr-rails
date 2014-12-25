@@ -1,5 +1,5 @@
 Clndr.configure do |config|
-  # config.template = Clndr::Template::Full
+  # config.template = Clndr::Template::FULL
   # config.week_offset = false
   # config.start_with_month = '2014-11-01'
   # config.days_of_the_week =["П","В", "С","ч","п","СБ","вс"]

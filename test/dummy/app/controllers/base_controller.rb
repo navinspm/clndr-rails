@@ -2,9 +2,9 @@ class BaseController < ApplicationController
   def index
     @full = Clndr.new(:test)
     @full.add_event(Time.now, 'Это событие')
-    @full.add_multiday_event(Time.now+1.day,Time.now+3.day,'Мулти',location:"Russia")
+    @full.add_multiday_event(Time.now+1.day,Time.now+3.day,'Мулти',location: 'Russia')
     @full.start_with_month = Time.now
-    @full.template= Clndr::Template::Mini
+    @full.template= Clndr::Template::MINI
     @full.click_event[:click]="function(target) {
         if(target.events.length) {
           var daysContainer = $('##{@full.name}-clndr').find('.days-container');
@@ -19,7 +19,7 @@ class BaseController < ApplicationController
     # @full.add_event Time.now, 'Test', location: 'NY'
     # @full.add_event Time.now+1.day,'Sec',location:"custom"
     # @default = Clndr.new(:blank)
-    # @default.template = Clndr::Template::Blank
+    # @default.template = Clndr::Template::BLANK
     # @default.week_offset = true
     # @default.start_with_month= nil
     # @default.days_of_the_week= nil

@@ -1,20 +1,20 @@
 require_relative './spec_helper'
 
 describe 'Clndr Templates' do
-  it 'should have Full template' do
-    expect(Clndr::Template::Full).to include('full')
+  it 'should have FULL template' do
+    expect(Clndr::Template::FULL).to include('full')
   end
 
-  it 'should have Blank template' do
-    expect(Clndr::Template::Blank).to be_nil
+  it 'should have BLANK template' do
+    expect(Clndr::Template::BLANK).to be_nil
   end
 
-  it 'should have Mini template' do
-    expect(Clndr::Template::Mini).to include('mini')
+  it 'should have MINI template' do
+    expect(Clndr::Template::MINI).to include('mini')
   end
 
-  it 'should have Simple template' do
-    expect(Clndr::Template::Simple).to include('simple')
+  it 'should have SIMPLE template' do
+    expect(Clndr::Template::SIMPLE).to include('simple')
   end
 
   it 'can get template from html' do

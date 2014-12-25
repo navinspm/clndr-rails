@@ -1,7 +1,19 @@
 class Clndr
 
+  # check date to available format
+  # if date is Time instance, convert to available string
+  def self.date_format(date)
+    if date.class == Time
+      date.strftime('%F')
+    elsif date.match(/\d{4}\-\d{2}\-\d{2}/)
+      date
+    else
+      raise Clndr::Error::WrongDateFormat
+    end
+  end
+
   # default config
-  @@template = Clndr::Template::Blank
+  @@template = Clndr::Template::BLANK
   @@week_offset = 1
   @@start_with_month = nil
   @@days_of_the_week = nil
@@ -14,7 +26,7 @@ class Clndr
   @@force_six_rows= true
 
   # todo check days of week for 7 length
-  # todo check for avalible events and targets
+  # todo check for available events and targets
   # rails like config
   def self.configure
     yield self
@@ -36,7 +48,7 @@ class Clndr
 
   def self.start_with_month=(date)
     if date.class == Time
-      @@start_with_month=date.strftime("%F")
+      @@start_with_month=date.strftime('%F')
     elsif date.match(/\d{4}\-\d{2}\-\d{2}/)
       @@start_with_month = date
     else
@@ -71,23 +83,11 @@ class Clndr
   end
 
   def self.constraints_start=(date)
-    if date.class == Time
-      @@constraints[:startDate]=date.strftime("%F")
-    elsif date.match(/\d{4}\-\d{2}\-\d{2}/)
-      @@constraints[:startDate]=date
-    else
-      raise Clndr::Error::WrongDateFormat
-    end
+    @@constraints[:startDate]= date_format date
   end
 
   def self.constraints_end=(date)
-    if date.class == Time
-      @@constraints[:endDate]=date.strftime("%F")
-    elsif date.match(/\d{4}\-\d{2}\-\d{2}/)
-      @@constraints[:endDate]=date
-    else
-      raise Clndr::Error::WrongDateFormat
-    end
+    @@constraints[:endDate]= date_format date
   end
 
   def self.force_six_rows=(boolean)
@@ -95,7 +95,7 @@ class Clndr
   end
 
   def self.default_settings
-    @@template = Clndr::Template::Blank
+    @@template = Clndr::Template::BLANK
     @@week_offset = 1
     @@start_with_month = nil
     @@days_of_the_week = nil
