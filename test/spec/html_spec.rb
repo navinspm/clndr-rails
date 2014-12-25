@@ -149,9 +149,52 @@ describe 'Clndr generate html' do
       expect(@test.view).not_to include('events:')
       end
     end
-    context 'multiday event' do
-    #   todo describe
+  end
+
+  context 'Link helpers' do
+    before :all do
+      Clndr.new :helpers
+    end
+    shared_examples 'navigate link' do
+      it 'genearete link' do
+        expect(self.send(link_type,:helpers,link_type.to_s)).to include("helpers.#{js}")
+      end
+      it 'generate link with some html_options' do
+        expect(self.send(link_type,:helpers,link_type.to_s,style:'color:red;')).to include('style="color:red;"')
+      end
+
+      it 'generate link with available CLNDR callbacks' do
+        expect(self.send(link_type,:helpers,link_type.to_s){true}).to include("withCallbacks: true")
+      end
     end
 
+    context 'next_month_link' do
+      it_should_behave_like 'navigate link' do
+        let(:link_type){:next_month_link}
+        let(:js){'forward'}
+      end
+    end
+
+    context 'previous_month_link' do
+      it_should_behave_like 'navigate link' do
+        let(:link_type){:previous_month_link}
+        let(:js){'back'}
+      end
+    end
+
+    context 'next_year_link' do
+      it_should_behave_like 'navigate link' do
+        let(:link_type){:next_year_link}
+        let(:js){'nextYear'}
+      end
+    end
+
+    context 'previous_year_link' do
+      it_should_behave_like 'navigate link' do
+        let(:link_type){:previous_year_link}
+        let(:js){'previousYear'}
+      end
+    end
   end
+
 end

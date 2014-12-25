@@ -47,13 +47,7 @@ class Clndr
   end
 
   def self.start_with_month=(date)
-    if date.class == Time
-      @@start_with_month=date.strftime('%F')
-    elsif date.match(/\d{4}\-\d{2}\-\d{2}/)
-      @@start_with_month = date
-    else
-      raise Clndr::Error::WrongDateFormat
-    end
+    @@start_with_month = date_format date
   end
 
   def self.days_of_the_week=(array_of_days)

@@ -53,7 +53,7 @@ describe 'Clndr configuration' do
   end
 
   context 'init' do
-    before :all do
+    before do
       Clndr.configure do |config|
         config.template = Clndr::Template::SIMPLE
         config.week_offset = false
@@ -76,10 +76,16 @@ describe 'Clndr configuration' do
       @calendar = Clndr.new(:test)
     end
     it_should_behave_like 'configurable'
+
+    it 'should convert week_offset config to digit' do
+      Clndr.configure{|config| config.week_offset = true}
+      @calendar = Clndr.new :test
+      expect(@calendar.week_offset).to eq(1)
+    end
   end
 
   context 'dinamycaly change config' do
-    before :all do
+    before :each do
       @calendar = Clndr.new(:test)
       @calendar.template = Clndr::Template::SIMPLE
       @calendar.week_offset = false
@@ -95,6 +101,11 @@ describe 'Clndr configuration' do
       @calendar.force_six_rows = false
     end
     it_should_behave_like 'configurable'
+
+    it 'should convert week_offset config to digit' do
+      @calendar.week_offset = true
+      expect(@calendar.week_offset).to eq(1)
+    end
   end
 
   it 'should fall to default settings when #defaul_settings call' do
