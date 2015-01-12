@@ -169,6 +169,21 @@ Code below demonstrate avelible settings and theirs defaults
        # By default dont used
        config.constraints_start= Time.now
        config.constraints_end= Time.now
+
+       # fixed count of calendar rows
+       config.force_six_rows = false
+
+       # setup custom css classes for some calendar elements like day, event etc.
+       # by default empty and use default CLNDR css classes
+       config.classes do |custom_class|
+         custom_class[:today] = "my-today"
+         custom_class[:event] = "my-event"
+         custom_class[:past]= "my-past"
+         custom_class[:lastMonth] = "my-last-month"
+         custom_class[:nextMonth] = "my-next-month"
+         custom_class[:adjacentMonth] = "my-adjacent-month"
+         custom_class[:inactive] = "my-inactive"
+       end
 ```
 
 ###i18n

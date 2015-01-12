@@ -91,12 +91,12 @@ describe 'Clndr generate html' do
       end
     end
 
-    context 'constraints_start' do
+    context 'custom class' do
       it_should_behave_like 'valid generator' do
-        let(:option){ :constraints_start=}
-        let(:value){Time.now}
-        let(:valid_value){" {startDate:'#{Time.now.strftime('%F')}'"}
-        let(:parameter){'constraints'}
+        let(:option){ :custom_last_month_class=}
+        let(:value){'my-custom-class'}
+        let(:valid_value){" {lastMonth:'#{value}',}"}
+        let(:parameter){'classes'}
       end
     end
 

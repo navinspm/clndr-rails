@@ -3,7 +3,7 @@ class Clndr
   # check date to available format
   # if date is Time instance, convert to available string
   def self.date_format(date)
-    if date.class == Time
+    if date.is_a?(Time)
       date.strftime('%F')
     elsif date.match(/\d{4}\-\d{2}\-\d{2}/)
       date
@@ -24,13 +24,29 @@ class Clndr
   @@done_rendering=nil
   @@constraints ={}
   @@force_six_rows= true
-
-  # todo check days of week for 7 length
+  @@custom_classes = {}
   # todo check for available events and targets
   # rails like config
   def self.configure
     yield self
   end
+
+  def self.default_settings
+    @@template = Clndr::Template::BLANK
+    @@week_offset = 1
+    @@start_with_month = nil
+    @@days_of_the_week = nil
+    @@click_events={}
+    @@targets={}
+    @@show_adjacent_months= true
+    @@adjacent_days_change_month=false
+    @@done_rendering=nil
+    @@constraints ={}
+    @@force_six_rows= true
+    @@custom_classes = {}
+    self
+  end
+
 
   def self.template=(template)
     @@template ||= template
@@ -51,7 +67,11 @@ class Clndr
   end
 
   def self.days_of_the_week=(array_of_days)
-    @@days_of_the_week=array_of_days
+    if array_of_days.length == 7
+      @@days_of_the_week=array_of_days
+    else
+      raise Clndr::Error::WrongDaysOfWeekArray
+    end
   end
 
   def self.show_adjacent_months=(boolean)
@@ -88,19 +108,8 @@ class Clndr
     @@force_six_rows= boolean
   end
 
-  def self.default_settings
-    @@template = Clndr::Template::BLANK
-    @@week_offset = 1
-    @@start_with_month = nil
-    @@days_of_the_week = nil
-    @@click_events={}
-    @@targets={}
-    @@show_adjacent_months= true
-    @@adjacent_days_change_month=false
-    @@done_rendering=nil
-    @@constraints ={}
-    @@force_six_rows= true
-    self
+  def self.classes
+    yield @@custom_classes
   end
 
 end

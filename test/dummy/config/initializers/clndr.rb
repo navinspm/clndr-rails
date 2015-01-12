@@ -1,4 +1,7 @@
 Clndr.configure do |config|
+  config.classes do |custom_class|
+   custom_class[:today]= 'my-today'
+  end
   # config.template = Clndr::Template::FULL
   # config.week_offset = false
   # config.start_with_month = '2014-11-01'

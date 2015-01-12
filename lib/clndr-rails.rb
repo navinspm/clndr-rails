@@ -54,6 +54,7 @@ class Clndr
     @done_rendering = @@done_rendering
     @constraints =@@constraints
     @force_six_rows =@@force_six_rows
+    @custom_classes = @@custom_classes
     @has_multiday= false
     @events =[]
     @@calendar_basket.merge! Hash[@name,self]
@@ -86,6 +87,7 @@ class Clndr
         #{'adjacentDaysChangeMonth:'+@adjacent_days_change_month.to_s+',' if @adjacent_days_change_month}
         #{'doneRendering:'+@done_rendering+',' unless @done_rendering.nil?}
         #{'forceSixRows:'+@force_six_rows.to_s+',' if @force_six_rows}
+        #{build_from_hash(@custom_classes, 'classes',true)}
         #{ if @constraints.length >0
              build_from_hash @constraints, 'constraints', true
            end}
@@ -143,6 +145,37 @@ class Clndr
     @constraints[:endDate] = Clndr.date_format date
   end
 
+  def custom_classes
+    @custom_classes
+  end
+
+  def custom_today_class=(css_class)
+    @custom_classes[:today]=css_class
+  end
+
+  def custom_event_class=(css_class)
+    @custom_classes[:event]=css_class
+  end
+  def custom_past_class=(css_class)
+    @custom_classes[:past]=css_class
+  end
+
+  def custom_last_month_class=(css_class)
+    @custom_classes[:lastMonth]=css_class
+  end
+
+  def custom_next_month_class=(css_class)
+    @custom_classes[:nextMonth]=css_class
+  end
+
+  def custom_adjacent_month_class=(css_class)
+    @custom_classes[:adjacentMonth]=css_class
+  end
+
+  def custom_inactive_class=(css_class)
+    @custom_classes[:inactive]=css_class
+  end
+
   # add event to events array
   # *other_data some data for tour access in template
   def add_event(date,title,*other_data)
@@ -184,8 +217,8 @@ class Clndr
           #{'date:\''+event.delete(:date)+'\',' unless event[:date].nil?}
           #{'startDate: \''+event.delete(:start_date)+'\','+
               'endDate: \'' + event.delete(:end_date)+'\',' unless event[:start_date].nil?}
-          title: '#{event.delete(:title)}',
-          #{event.map{|k,v| "#{k}:'#{v}'"}.join(',')}},".gsub(/\n\s*\n/,"\n")
+          title: '#{event.delete(:title).gsub("'","&quot")}',
+          #{event.map{|k,v| "#{k}:'#{v.gsub("'","&quot")}'"}.join(',')}},".gsub(/\n\s*\n/,"\n")
 
     end
 

@@ -10,5 +10,11 @@ class Clndr
        "Clndr support Ruby Time object or date string format 'YYYY-MM-DD' "
       end
     end
+
+    class WrongDaysOfWeekArray <StandardError
+      def message
+        "Array of days must contain 7 elements"
+      end
+    end
   end
 end

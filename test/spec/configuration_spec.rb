@@ -50,6 +50,10 @@ describe 'Clndr configuration' do
     it 'should get force_six_rows config' do
       expect(@calendar.force_six_rows).to be_falsey
     end
+
+    it 'should get custom classes' do
+      expect(@calendar.custom_classes[:today]).to eq('my-today')
+    end
   end
 
   context 'init' do
@@ -71,8 +75,10 @@ describe 'Clndr configuration' do
         config.constraints_start = '2014-12-31'
         config.constraints_end = '2014-12-31'
         config.force_six_rows = false
+        config.classes do |custom_class|
+          custom_class[:today] = "my-today"
+        end
       end
-
       @calendar = Clndr.new(:test)
     end
     it_should_behave_like 'configurable'
@@ -99,6 +105,7 @@ describe 'Clndr configuration' do
       @calendar.constraints_start = '2014-12-31'
       @calendar.constraints_end = '2014-12-31'
       @calendar.force_six_rows = false
+      @calendar.custom_classes[:today]= 'my-today'
     end
     it_should_behave_like 'configurable'
 
@@ -110,14 +117,21 @@ describe 'Clndr configuration' do
 
   it 'should fall to default settings when #defaul_settings call' do
     Clndr.default_settings
-    expect(Clndr.new(:test).template).to eq(Clndr::Template::BLANK)
+    @clndr = Clndr.new(:test)
+    expect(@clndr.template).to eq(Clndr::Template::BLANK)
+    expect(@clndr.custom_classes.length).to eq(0)
+
   end
 
   it 'should raise exception if date format wrong' do
     expect{Clndr.configure{|config| config.start_with_month = 'dsf'}}.to raise_error(Clndr::Error::WrongDateFormat)
     expect{Clndr.configure{|config| config.constraints_start = 'dsf'}}.to raise_error(Clndr::Error::WrongDateFormat)
     expect{Clndr.configure{|config| config.constraints_end = 'dsf'}}.to raise_error(Clndr::Error::WrongDateFormat)
-
   end
+
+  it 'should raise exception if date of month array contain more or less records' do
+    expect{Clndr.configure{|config| config.days_of_the_week = ['a','b']}}.to raise_error(Clndr::Error::WrongDaysOfWeekArray)
+  end
+
 
 end
