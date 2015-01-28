@@ -94,7 +94,8 @@ class Clndr
         #{if @has_multiday
           "multiDayEvents: {
             startDate: 'startDate',
-            endDate: 'endDate'
+            endDate: 'endDate',
+            singleDay: 'date'
           },"
                    end}
         #{if @events.length > 0
