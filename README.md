@@ -104,6 +104,36 @@ This is example of simple template:
   </div>
 </script>
 ```
+ **N.B.! If you use ERB like template engine you must use <%% %> in your templates to escape ERB tag**
+
+All of the things you have access to in your template:
+
+```javascript
+// an array of day-of-the-week abbreviations,
+// shifted as requested using the weekOffset parameter.
+daysOfTheWeek: ['S', 'M', 'T', etc...]
+// the number of 7-block calendar rows,
+// in the event that you want to do some looping with it
+numberOfRows: 5
+// the days object, documented in more detail above
+days: [ { day, classes, id, events, date } ]
+// the month name- don't forget that you can do things like
+// month.substring(0, 1) and month.toLowerCase() in your template
+previousMonth: "April"
+month: "May"
+nextMonth: "June"
+// the year that the calendar is currently focused on
+year: "2013"
+// all of the events happening this month
+eventsThisMonth: [ ],
+// all of the events happening last month
+eventsLastMonth: [ ],
+// all of the events happening next month
+eventsNextMonth: [ ],
+// anything you passed into the 'extras' property when creating the clndr
+extras: { }
+```
+
 For more information about templating read [CLNDR docs](https://github.com/kylestetz/CLNDR#template-requirements) or [CLNDR site](http://kylestetz.github.io/CLNDR/)
 
 

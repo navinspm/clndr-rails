@@ -27,5 +27,6 @@ class BaseController < ApplicationController
     # @default.target[:nextButton]='next'
     # @default.show_adjacent_months =false
     # Clndr.new(:custom_template).template = Clndr::Template.from_html('#custom-template')
+    @custom_clndr = Clndr.new(:second_clndr)
   end
 end
