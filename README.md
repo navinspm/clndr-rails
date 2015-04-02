@@ -225,3 +225,5 @@ You can internationalize calendars by include moment.js locale file
  Now date format will be for Russia
 
 This project rocks and uses MIT-LICENSE.
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/sedx/clndr-rails/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
