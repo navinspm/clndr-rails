@@ -40,7 +40,7 @@ You can access to  Clndr by `:name_of_clndr` in helpers
 If you need dynamically change some settings you can assignment your Clndr to instance variable and use config methods, eg:
 ```
 @simple_clndr = Clndr.new(:simple)
-@simple_clndr.start_with_month = Time.now-1.yaer
+@simple_clndr.start_with_month = Time.now - 1.year
 ```
 To add event just use `.add_event(date,name,*other_data)` method.
 ```
