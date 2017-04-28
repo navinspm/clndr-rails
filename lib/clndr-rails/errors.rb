@@ -1,7 +1,9 @@
 class Clndr
   module Error
     class CalendarNotFound <StandardError
-
+      def message
+        "Calendar Not Found"
+      end
       #this error raise when calendar not found
     end
 

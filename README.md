@@ -1,7 +1,5 @@
-[![Build Status](https://travis-ci.org/sedx/clndr-rails.svg?branch=master)](https://travis-ci.org/sedx/clndr-rails) [![Code Climate](https://codeclimate.com/github/sedx/clndr-rails/badges/gpa.svg)](https://codeclimate.com/github/sedx/clndr-rails) [![Test Coverage](https://codeclimate.com/github/sedx/clndr-rails/badges/coverage.svg)](https://codeclimate.com/github/sedx/clndr-rails)
-#IN SEARCH OF NEW REPO OWNER
-I'm no more using CLNDR. It's a bit hard to maintain gem when you not using them. In this case I will be happy to transfer repository to someone, who regularly use Rails and CLNDR.
-If you use and want maintain this gem you can replay [this issue](https://github.com/sedx/clndr-rails/issues/5) 
+[![Code Climate](https://codeclimate.com/github/navinspm/clndr-rails/badges/gpa.svg)](https://codeclimate.com/github/navinspm/clndr-rails)[![Test Coverage](https://codeclimate.com/github/navinspm/clndr-rails/badges/coverage.svg)](https://codeclimate.com/github/navinspm/clndr-rails/coverage)
+
 
 #Clndr Rails
 Simple way to insert calendar view into your rails app
