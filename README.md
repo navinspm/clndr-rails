@@ -1,14 +1,14 @@
 [![Code Climate](https://codeclimate.com/github/navinspm/clndr-rails/badges/gpa.svg)](https://codeclimate.com/github/navinspm/clndr-rails)[![Test Coverage](https://codeclimate.com/github/navinspm/clndr-rails/badges/coverage.svg)](https://codeclimate.com/github/navinspm/clndr-rails/coverage)
 
 
-#Clndr Rails
-Simple way to insert calendar view into your rails app
+# Clndr Rails
+Simple way to insert calendar view into your Rails app
 This gem based on [CLNDR.js](http://kylestetz.github.io/CLNDR/)
 
-##Version
+## Version
 Gem version have `x.x.x.y` where `x.x.x` - CLNDR version `y`- gem version
 
-##Instalation
+## Instalation
 For basic usage just include clndr-rails gem in `Gemfile`:
 
 ```
@@ -20,14 +20,14 @@ then run
 bundle install
 ```
 
-##Usage
+## Usage
 Include clndr-rails javascripts and dependency libraries in your `app/assets/javascripts/application.js`:
 
 ```
 //= require jquery
 //= require moment
-//=require underscore
-//=require clndr-rails
+//= require underscore
+//= require clndr-rails
 ```
 and include css if you want use built in templates. Add into `app/assets/stylesheets/application.css`:
 
@@ -35,11 +35,11 @@ and include css if you want use built in templates. Add into `app/assets/stylesh
 *= require clndr-rails
 ```
 
-###Create and use calendar
+### Create and use calendar
 Create calendar is very simple.
 Just use `Clndr.new(:name_of_clndr)` in your controller or other else.
 You can access to  Clndr by `:name_of_clndr` in helpers
-If you need dynamically change some settings you can assignment your Clndr to instance variable and use config methods, eg:
+If you need to dynamically change some settings you can assign your Clndr to an instance variable and use config methods, eg:
 ```
 @simple_clndr = Clndr.new(:simple)
 @simple_clndr.start_with_month = Time.now - 1.year
@@ -48,17 +48,17 @@ To add event just use `.add_event(date,name,*other_data)` method.
 ```
 @simple_clndr.add_event(Time.now,'Event title',description:'You can access to description in your template by <%%= event.location %>.'
 ```
-Also you can add multiday event:
+You can also add multiday events:
 ```
 # add_multiday_event(start_date,end_date,name,*other_data)
 @simple_clndr.add_multiday_event('2012-12-1','2012-12-31','December 2012')
 ```
-If you need use public CLNDR API you can use js var that same your Clnd name (see the generated code).
+If you need to use the public CLNDR API, you can use js var that is the same as your Clnd name (see the generated code).
 
 [More about API](https://github.com/kylestetz/CLNDR#returning-the-instance--public-api)
 
-###Helpers
-For display Clndr in your view you can use `show_calendar(:clndr_name,html_atributs)` helper
+### Helpers
+To display Clndr in your view, you can use the `show_calendar(:clndr_name,html_atributs)` helper
 ```
 <%= show_calendar(:simple, id:'simple-calendar',style:'width:60%';)%>
 ```
@@ -67,23 +67,23 @@ or `.view` method:
 <%= @simple_calendar.view %>
 ```
 
-If you plane use Public API you can use link helpers:
+If you plan to use the Public API you can use link helpers:
 ```
 next_month_link(calendar_name, text, html_options)
 previous_month_link(calendar_name, text, html_options)
 next_year_link(calendar_name, text, html_options)
 previous_year_link(calendar_name, text, html_options)
 ```
-In each link helper you can pass empty block or block with true to activate events callback.
+In each link helper you can pass an empty block or a block with `true` to activate event callbacks.
 
-###Templates
-CLNDR.js doesn't generate HTML,it inject data to yours template.
-If you want quick start you can use built in gem templates.
+### Templates
+CLNDR.js does not generate HTML, it injects data to your template.
+If you want a quick start you can use the built in gem templates.
 All templates include in `Clndr::Template` module
-Now add two templates `FULL`, `MINI` and `SIMPLE`, also you can use `BLANK` template (it's empty template and CLNDR.js generate simple html)
-If you need more functionality or want create custom design you must use `Clndr::Template.from_html()` method.
-This metod get one argument selector in JQuery's format (`'#some-id'` or `'.some-class'`)
-This is example of simple template:
+Now add two templates `FULL`, `MINI` and `SIMPLE`, also you can use `BLANK` template (it's an empty template and CLNDR.js generates simple HTML).
+If you need more functionality or want to create custom designs, you must use the `Clndr::Template.from_html()` method.
+This metod gets one argument selector in JQuery's format (`'#some-id'` or `'.some-class'`).
+This is an example of a simple template:
 
 ```
 <script type="text/template" id="full-clndr-template">
@@ -106,7 +106,7 @@ This is example of simple template:
   </div>
 </script>
 ```
- **N.B.! If you use ERB like template engine you must use <%% %> in your templates to escape ERB tag**
+ **If you use ERB as the template engine you must use <%% %> in your templates to escape the ERB tag**
 
 All of the things you have access to in your template:
 
@@ -136,12 +136,12 @@ eventsNextMonth: [ ],
 extras: { }
 ```
 
-For more information about templating read [CLNDR docs](https://github.com/kylestetz/CLNDR#template-requirements) or [CLNDR site](http://kylestetz.github.io/CLNDR/)
+For more information about templating read the [CLNDR docs](https://github.com/kylestetz/CLNDR#template-requirements) or [CLNDR site](http://kylestetz.github.io/CLNDR/)
 
 
 ### Configure
-You can precofig your Clndr by creating `initializers/clndr.rb` file.
-Code below demonstrate avelible settings and theirs defaults
+You can preconfig your Clndr by creating the `initializers/clndr.rb` file.
+The code below demonstrates available settings and their defaults
 
 ```
 
@@ -166,7 +166,7 @@ Code below demonstrate avelible settings and theirs defaults
       event[:click] = 'function(target){}'
 
       # fired when a user goes forward a month. returns a moment.js object set to the correct month.
-      event[:nextMonth]= 'function(mont){}'
+      event[:nextMonth]= 'function(month){}'
 
       # fired when a user goes back a month. returns a moment.js object set to the correct month.
       event[:previousMonth]= 'function(month){}'
@@ -218,11 +218,11 @@ Code below demonstrate avelible settings and theirs defaults
        end
 ```
 
-###i18n
+### i18n
 You can internationalize calendars by include moment.js locale file
 
  ```
- //=require moment/ru
+ //= require moment/ru
  ```
  Now date format will be for Russia
 
