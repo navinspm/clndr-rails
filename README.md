@@ -20,14 +20,23 @@ then run
 bundle install
 ```
 
+Run the Genereator
+
+```
+rails generate clndr:install
+```
+
+This will generate initializer in config/initializer/ with default configurations. 
+
 ##Usage
+
 Include clndr-rails javascripts and dependency libraries in your `app/assets/javascripts/application.js`:
 
 ```
 //= require jquery
 //= require moment
-//=require underscore
-//=require clndr-rails
+//= require underscore
+//= require clndr-rails
 ```
 and include css if you want use built in templates. Add into `app/assets/stylesheets/application.css`:
 
@@ -60,7 +69,7 @@ If you need use public CLNDR API you can use js var that same your Clnd name (se
 ###Helpers
 For display Clndr in your view you can use `show_calendar(:clndr_name,html_atributs)` helper
 ```
-<%= show_calendar(:simple, id:'simple-calendar',style:'width:60%';)%>
+<%= show_calendar(:simple, id:'simple-calendar',style:'width:60%')%>
 ```
 or `.view` method:
 ```
@@ -140,82 +149,86 @@ For more information about templating read [CLNDR docs](https://github.com/kyles
 
 
 ### Configure
-You can precofig your Clndr by creating `initializers/clndr.rb` file.
+You can precofig your Clndr by editing `config/initializers/clndr.rb` file.
 Code below demonstrate avelible settings and theirs defaults
 
 ```
+Clndr.configure do |config|
 
-    Clndr.configure do |config|
+  # you can configure default template, jast use Clndr::Template::<template_name or from_html(selector)>
+  config.template = Clndr::Template::FULL
 
-      # you can configure default template, jast use Clndr::Template::<template_name or from_html(selector)>
-      config.template = Clndr::Template::FULL
+  # start the week off on Sunday (true), Monday (false)
+  # If you are changing the value ensure you are changing the abbreviation below 
+  config.week_offset = true
 
-      # start the week off on Sunday (true), Monday (false)
-      config.week_offset = false
+  # An array of day abbreviation labels for the days
+  config.days_of_the_week =['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
 
-      # determines which month to start with using either a date string in format `YYYY-MM-DD`, instance of `Time` class or `nil` (if use nil Clndr will use current month)
-      config.start_with_month = nil
+  # determines which month to start with using either a date string in format `YYYY-MM-DD`, instance of `Time` class or `nil` (if use nil Clndr will use current month)
+  config.start_with_month = Time.now
 
-      # Array of days ['M','T','W','T','F','S','S'] or nil (use moment() object)
-      config.days_of_the_week =nil
+  # Configure callbacks. Get argument string of js function
+  config.click_events do |event|
 
-      # Configure callbacks. Get argument string of js function
-       config.click_events do |event|
+    # returns a 'target' object containing the DOM element, any events, and the date as a moment.js object.
+    event[:click] = 'function(target){}'
 
-      # returns a 'target' object containing the DOM element, any events, and the date as a moment.js object.
-      event[:click] = 'function(target){}'
+    # fired when a user goes forward a month. returns a moment.js object set to the correct month.
+    event[:nextMonth]= 'function(mont){}'
 
-      # fired when a user goes forward a month. returns a moment.js object set to the correct month.
-      event[:nextMonth]= 'function(mont){}'
+    # fired when a user goes back a month. returns a moment.js object set to the correct month.
+    event[:previousMonth]= 'function(month){}'
 
-      # fired when a user goes back a month. returns a moment.js object set to the correct month.
-      event[:previousMonth]= 'function(month){}'
+    # fired when a user goes back OR forward a month. returns a moment.js object set to the correct month.
+    event[:onMonthChange]= 'function(month){}'
 
-      # fired when a user goes back OR forward a month. returns a moment.js object set to the correct month.
-      event[:onMonthChange]= 'function(month){}'
+    # fired when a user goes to the current month/year. returns a moment.js object set to the correct month.
+    event[:today]= 'function(month){}'
+    
+  end
 
-      # fired when a user goes to the current month/year. returns a moment.js object set to the correct month.
-      event[:today]= 'function(month){}'
-    end
+  # the target classnames that CLNDR will look for to bind events. these are the defaults.
+  config.targets do |target|
+    target[:nextButton]='clndr-next-button'
+    target[:previousButton]= 'clndr-previous-button'
+    target[:todayButton]= 'clndr-today-button'
+    target[:day]= 'day'
+    target[:empty]='empty'
+  end
 
-       # the target classnames that CLNDR will look for to bind events. these are the defaults.
-       config.targets do |target|
-          target[:nextButton]='clndr-next-button'
-          target[:previousButton]= 'clndr-previous-button'
-          target[:todayButton]= 'clndr-today-button'
-          target[:day]= 'day'
-          target[:empty]='empty'
-       end
+  # show the numbers of days in months adjacent to the current month (and populate them with their events)
+  config.show_adjacent_months= true
 
-       # show the numbers of days in months adjacent to the current month (and populate them with their events)
-       config.show_adjacent_months= true
+  # when days from adjacent months are clicked, switch the current month.
+  # fires nextMonth/previousMonth/onMonthChange click callbacks
+  config.adjacent_days_change_month= true
 
-       # when days from adjacent months are clicked, switch the current month.
-       # fires nextMonth/previousMonth/onMonthChange click callbacks
-       config.adjacent_days_change_month= true
+  # a callback when the calendar is done rendering. This is a good place to bind custom event handlers.
+  config.done_rendering='function(){}' # or nil
 
-       # a callback when the calendar is done rendering. This is a good place to bind custom event handlers.
-       config.done_rendering='function(){}' # or nil
+  # Set range of dates for calendar
+  # By default dont used
 
-       # Set range of dates for calendar
-       # By default dont used
-       config.constraints_start= Time.now
-       config.constraints_end= Time.now
+  #config.constraints_start= Time.now
+  #config.constraints_end= Time.now
 
-       # fixed count of calendar rows
-       config.force_six_rows = false
+  # fixed count of calendar rows
+  config.force_six_rows = false
 
-       # setup custom css classes for some calendar elements like day, event etc.
-       # by default empty and use default CLNDR css classes
-       config.classes do |custom_class|
-         custom_class[:today] = "my-today"
-         custom_class[:event] = "my-event"
-         custom_class[:past]= "my-past"
-         custom_class[:lastMonth] = "my-last-month"
-         custom_class[:nextMonth] = "my-next-month"
-         custom_class[:adjacentMonth] = "my-adjacent-month"
-         custom_class[:inactive] = "my-inactive"
-       end
+  # setup custom css classes for some calendar elements like day, event etc.
+  # by default empty and use default CLNDR css classes
+  config.classes do |custom_class|
+    custom_class[:today] = "my-today"
+    custom_class[:event] = "my-event"
+    custom_class[:past]= "my-past"
+    custom_class[:lastMonth] = "my-last-month"
+    custom_class[:nextMonth] = "my-next-month"
+    custom_class[:adjacentMonth] = "my-adjacent-month"
+    custom_class[:inactive] = "my-inactive"
+  end
+end
+
 ```
 
 ###i18n
@@ -228,4 +241,4 @@ You can internationalize calendars by include moment.js locale file
 
 This project rocks and uses MIT-LICENSE.
 
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/sedx/clndr-rails/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
