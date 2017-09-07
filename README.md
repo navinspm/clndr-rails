@@ -1,5 +1,4 @@
-[![Code Climate](https://codeclimate.com/github/navinspm/clndr-rails/badges/gpa.svg)](https://codeclimate.com/github/navinspm/clndr-rails)[![Test Coverage](https://codeclimate.com/github/navinspm/clndr-rails/badges/coverage.svg)](https://codeclimate.com/github/navinspm/clndr-rails/coverage)
-
+[![Code Climate](https://codeclimate.com/github/navinspm/clndr-rails/badges/gpa.svg)](https://codeclimate.com/github/navinspm/clndr-rails)[![Gem Version](https://badge.fury.io/rb/clndr-rails.svg)](https://badge.fury.io/rb/clndr-rails)
 
 #Clndr Rails
 Simple way to insert calendar view into your rails app
