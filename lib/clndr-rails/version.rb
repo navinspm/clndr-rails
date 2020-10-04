@@ -1,5 +1,5 @@
 class Clndr
   module Rails
-    VERSION = "1.4.7.2"
+    VERSION = "1.5.1.0"
   end
 end
